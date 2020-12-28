@@ -28,6 +28,8 @@ func main() {
 	rtr.HandleFunc("/health", services.Health).Methods(get)
 	// mongo connection test
 	rtr.HandleFunc("/connection", services.Connection).Methods(get)
+	// custom mongo query
+	rtr.HandleFunc("/read/{collection}", services.ReadCollectionPayload).Methods(post)
 
 	// use go routinue to serve endpoint
 	ctx := context.Background()

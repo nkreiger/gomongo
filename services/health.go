@@ -1,9 +1,12 @@
 package services
 
 import (
+	"app/mongo"
+	"context"
 	"encoding/json"
 	"log"
 	"net/http"
+	"time"
 )
 
 type status struct {
@@ -29,4 +32,28 @@ var Health = func(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Printf("error writing response to user: %v", err)
 	}
+}
+
+var Connection = func(w http.ResponseWriter, r *http.Request) {
+	(w).Header().Set("Content-Type", "application/json")
+
+	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	client, err := mongo.Connect(ctx)
+	if err != nil {
+		writeStatus(&w, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	defer func() {
+		if err := client.Disconnect(ctx); err != nil {
+			log.Printf("error disconnecting client: %v", err)
+		}
+
+		cancel()
+	}()
+
+	// write back okay for good connection
+	writeStatus(&w, http.StatusOK, nil)
 }
