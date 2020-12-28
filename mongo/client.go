@@ -11,7 +11,7 @@ import (
 
 // Connect returns a successfully connected mongo client
 func Connect(ctx context.Context) (*mongo.Client, error) {
-	url := "mongodb://admin:admin@localhost:8080"
+	url := "mongodb://admin:admin@localhost:27017"
 
 	log.Printf("connect to mongodb at: %v", url)
 

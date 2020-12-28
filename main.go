@@ -26,6 +26,8 @@ func main() {
 
 	// health endpoint
 	rtr.HandleFunc("/health", services.Health).Methods(get)
+	// mongo connection test
+	rtr.HandleFunc("/connection", services.Connection).Methods(get)
 
 	// use go routinue to serve endpoint
 	ctx := context.Background()
